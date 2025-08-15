@@ -44,7 +44,7 @@ const TodoItem = memo(function TodoItem({ item, onToggle, onDelete, onEdit }) {
           />
         ) : (
           <TouchableOpacity
-            onLongPress={() => setEditing(true)}
+            onPress={() => setEditing(true)}
             activeOpacity={0.7}
           >
             <Text

@@ -1,4 +1,10 @@
-import React, { useEffect, useCallback, useMemo, useRef } from "react";
+import React, {
+  useEffect,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import {
   View,
   Text,
@@ -24,6 +30,8 @@ import TodoItem from "../components/TodoItem";
 import FilterBar from "../components/FilterBar";
 import SortBar from "../components/SortBar";
 import { COLORS, SPACING } from "../styles/theme";
+import LottieView from "lottie-react-native";
+import DeleteAnimation from "@/assets/delete.json";
 
 export default function MainScreen({ navigation }) {
   const dispatch = useDispatch();
@@ -33,13 +41,16 @@ export default function MainScreen({ navigation }) {
   const error = useSelector((s) => s.todos.error);
   const currentFilter = useSelector((s) => s.todos.filter);
   const currentSort = useSelector((s) => s.todos.sort);
+  const [loading, setLoading] = useState(false);
 
   const flatListRef = useRef();
+
   useEffect(() => {
     if (status === "idle") dispatch(fetchTodos());
   }, [status, dispatch]);
 
   const onToggle = useCallback((id) => dispatch(toggleTodo(id)), [dispatch]);
+
   const onDelete = useCallback(
     (id) => {
       Alert.alert("Delete", "Are you sure you want to delete this TODO?", [
@@ -47,7 +58,13 @@ export default function MainScreen({ navigation }) {
         {
           text: "Delete",
           style: "destructive",
-          onPress: () => dispatch(deleteTodo(id)),
+          onPress: () => {
+            setLoading(true);
+            dispatch(deleteTodo(id));
+            setTimeout(() => {
+              setLoading(false);
+            }, 2000);
+          },
         },
       ]);
     },
@@ -126,7 +143,10 @@ export default function MainScreen({ navigation }) {
       <FlatList
         data={todos}
         keyExtractor={keyExtractor}
-        contentContainerStyle={{ paddingVertical: SPACING.m }}
+        contentContainerStyle={{
+          paddingVertical: SPACING.m,
+          position: "relative",
+        }}
         ItemSeparatorComponent={() => <View style={{ height: SPACING.s }} />}
         initialScrollIndex={10}
         renderItem={({ item }) => (
@@ -150,6 +170,16 @@ export default function MainScreen({ navigation }) {
         }}
         ref={flatListRef}
       />
+      {loading && (
+        <View style={styles.animationContainer}>
+          <LottieView
+            source={DeleteAnimation} // Path to your animation
+            autoPlay={true}
+            loop={true}
+            style={styles.animation} // Added style with dimensions
+          />
+        </View>
+      )}
     </View>
   );
 }
@@ -207,5 +237,17 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 1,
     marginTop: 15,
+  },
+  animationContainer: {
+    position: "absolute",
+    top: "30%",
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+  },
+  animation: {
+    width: 250,
+    height: 250,
   },
 });

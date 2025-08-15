@@ -11,46 +11,67 @@ import {
 import { useDispatch } from "react-redux";
 import { addTodo } from "../store/todosSlice";
 import { COLORS, SPACING } from "../styles/theme";
+import LottieView from "lottie-react-native";
+import Animation from "@/assets/added.json";
 
 export default function AddTodoScreen({ navigation }) {
   const [title, setTitle] = useState("");
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
 
   const onAdd = useCallback(() => {
     const trimmed = title.trim();
     if (!trimmed) return;
+
+    setLoading(true);
     dispatch(addTodo(trimmed));
-    navigation.goBack();
+
+    setTimeout(() => {
+      setLoading(false);
+      navigation.goBack();
+    }, 2000);
   }, [title, dispatch, navigation]);
 
   return (
     <>
       <Text style={styles.headerText}>Add Todo</Text>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : undefined}
-        style={styles.container}
-      >
-        {/* INPUT TEXT CONTAINER FOR ADDING TODOS */}
-        <View style={styles.card}>
-          <TextInput
-            placeholder="What needs to be done?"
-            placeholderTextColor="#888"
-            value={title}
-            onChangeText={setTitle}
-            style={styles.input}
-            autoFocus
-            returnKeyType="done"
-            onSubmitEditing={onAdd}
+      {!loading ? (
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : undefined}
+          style={styles.container}
+        >
+          {/* INPUT TEXT CONTAINER FOR ADDING TODOS */}
+          <View style={styles.card}>
+            <TextInput
+              placeholder="What needs to be done?"
+              placeholderTextColor="#888"
+              value={title}
+              onChangeText={setTitle}
+              style={styles.input}
+              autoFocus
+              returnKeyType="done"
+              onSubmitEditing={onAdd}
+            />
+            <TouchableOpacity
+              style={styles.btn}
+              onPress={onAdd}
+              accessibilityLabel="Add TODO"
+            >
+              <Text style={styles.btnText}>Add</Text>
+            </TouchableOpacity>
+          </View>
+        </KeyboardAvoidingView>
+      ) : (
+        <View style={styles.animationContainer}>
+          <LottieView
+            source={Animation} // Path to your animation
+            autoPlay={true}
+            loop={true}
+            style={styles.animation} // Added style with dimensions
           />
-          <TouchableOpacity
-            style={styles.btn}
-            onPress={onAdd}
-            accessibilityLabel="Add TODO"
-          >
-            <Text style={styles.btnText}>Add</Text>
-          </TouchableOpacity>
+          <Text style={styles.animationText}>Added Successfully</Text>
         </View>
-      </KeyboardAvoidingView>
+      )}
     </>
   );
 }
@@ -87,5 +108,21 @@ const styles = StyleSheet.create({
     padding: 5,
     fontSize: 15,
     fontFamily: "Poppins-Regular",
+  },
+  animationContainer: {
+    width: "100%",
+    height: "80%",
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+  },
+  animation: {
+    width: 150,
+    height: 150,
+  },
+  animationText: {
+    color: "white",
+    fontFamily: "Poppins-Regular",
+    fontSize: 15,
   },
 });
