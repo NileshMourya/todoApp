@@ -127,15 +127,25 @@ export default function MainScreen({ navigation }) {
   return (
     <View style={styles.container}>
       {header}
-      <ScrollView horizontal={true}>
+
+      <View style={styles.filterContainer}>
+        <Text style={styles.filterText}>Filter By</Text>
+
         <View style={styles.controlsRow}>
           <FilterBar
             value={currentFilter}
             onChange={(f) => dispatch(setFilter(f))}
           />
+        </View>
+      </View>
+
+      <View style={styles.filterContainer}>
+        <Text style={styles.filterText}>Sort By</Text>
+
+        <View style={styles.sortingBtn}>
           <SortBar value={currentSort} onChange={(s) => dispatch(setSort(s))} />
         </View>
-      </ScrollView>
+      </View>
 
       <View style={styles.divider}></View>
 
@@ -203,11 +213,11 @@ const styles = StyleSheet.create({
     paddingHorizontal: 14,
     borderRadius: 8,
   },
-  addBtnText: { color: COLORS.black, fontWeight: "600" },
+  addBtnText: { color: COLORS.black },
   controlsRow: {
     flexDirection: "row",
     justifyContent: "center",
-    marginBottom: SPACING.s,
+    marginBottom: 5,
     gap: 8,
   },
   centered: {
@@ -236,7 +246,7 @@ const styles = StyleSheet.create({
     elevation: 2,
     width: "100%",
     height: 1,
-    marginTop: 15,
+    marginTop: 5,
   },
   animationContainer: {
     position: "absolute",
@@ -249,5 +259,21 @@ const styles = StyleSheet.create({
   animation: {
     width: 250,
     height: 250,
+  },
+  sortingBtn: {
+    marginBottom: 5,
+    gap: 8,
+    marginTop: 5,
+  },
+  filterText: {
+    fontSize: 14,
+    fontFamily: "Poppins-Regular",
+    color: "white",
+  },
+  filterContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+    justifyContent: "space-between",
   },
 });

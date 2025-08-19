@@ -1,5 +1,6 @@
 Note: The APK was built using the EAS CLI, which is why it has a larger file size. Since Git only accepts files up to 50 MB, and the APK is around 80 MB, it cannot be uploaded directly to the repository.
 
 Drive URL: https://drive.google.com/drive/u/0/folders/1qEBnEjII1ogNNF8a3BEsbxn8cPseysLe
+           
 
 Once I receive your request for the APK, I will grant access to the file. Feel free to reach out if you encounter any issues.
