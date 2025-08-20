@@ -125,7 +125,7 @@ export const selectVisibleTodos = createSelector(
 
     if (todos.sort === "RECENT") {
       list = [...list].sort(
-        (a, b) => new Date(b.created_at) - new Date(a.created_at)
+        (a, b) => new Date(b.updated_at) - new Date(a.updated_at)
       );
     } else if (todos.sort === "ID") {
       list = [...list].sort((a, b) => Number(a.id) - Number(b.id));
